@@ -8,10 +8,10 @@ public class CustomerProf
   private float income;
   private String static;
   private String use;
-  private String vehicleInfo;
+  private VehicleInfo vehicleInfo;
   
   public CustomerProf(String adminID, String firstName, String lastName, String address, String phone,
-                      float income, String static, String use, String vehicleInfo)
+                      float income, String static, String use, VehicleInfo vehicleInfo)
   {
     this.adminID = adminID;
     this.firstName = firstName;
@@ -24,7 +24,45 @@ public class CustomerProf
     this.vehicleInfo = vehicleInfo;
   }
   
+  public String getadminID()
+  {
+    return adminID;
+  }
   
+  public String getfirstName()
+  {
+    return firstName;
+  }
+  
+  public String lastName()
+  {
+    return lastName;
+  }
+  
+  public String Address()
+  {
+    return address;
+  }
+  
+  public String Phone()
+  {
+    return phone;
+  }
+  
+  public float Income()
+  {
+    return income;
+  }
+  
+  public String Status()
+  {
+    return status;
+  }
+  
+  public VehicleInfo getVehicleInfo()
+  {
+    return vehicleInfo;
+  }
 
 
 
