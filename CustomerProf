@@ -34,27 +34,27 @@ public class CustomerProf
     return firstName;
   }
   
-  public String lastName()
+  public String getlastName()
   {
     return lastName;
   }
   
-  public String Address()
+  public String getAddress()
   {
     return address;
   }
   
-  public String Phone()
+  public String getPhone()
   {
     return phone;
   }
   
-  public float Income()
+  public float getIncome()
   {
     return income;
   }
   
-  public String Status()
+  public String getStatus()
   {
     return status;
   }
