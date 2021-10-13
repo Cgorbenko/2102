@@ -63,6 +63,46 @@ public class CustomerProf
   {
     return vehicleInfo;
   }
+  
+  public void updateFirstName(String firstName)
+  {
+    this.firstName = firstName;
+  }
+  
+  public void updateLastName(String lastName)
+  {
+    this.lastName = lastName;
+  }
+  
+  public void updateAddress(String address)
+  {
+    this.address = address;
+  }
+  
+  public void updatePhone(String phone)
+  {
+    this.phone = phone;
+  }
+  
+  public void updateIncome(float income)
+  {
+    this.income = income;
+  }
+  
+  public void updateStatus(String status)
+  {
+    this.status = status;
+  }
+  
+  public void updateUse(String use)
+  {
+    this.use = use;
+  }
+  
+  public void updateVehicleInfo(VehicleInfo)
+  {
+    this.vehicleInfo = vehicleInfo;
+  }
 
 
 
