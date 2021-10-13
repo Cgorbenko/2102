@@ -2,7 +2,6 @@ public class CustomerProf
 {
   private String adminID;
   private String firstName;
-  private String firstName;
   private String lastName;
   private String address;
   private String phone;
@@ -10,6 +9,22 @@ public class CustomerProf
   private String static;
   private String use;
   private String vehicleInfo;
+  
+  public CustomerProf(String adminID, String firstName, String lastName, String address, String phone,
+                      float income, String static, String use, String vehicleInfo)
+  {
+    this.adminID = adminID;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.address = address;
+    this.phone = phone;
+    this.income = income;
+    this.static = static;
+    this.use = use;
+    this.vehicleInfo = vehicleInfo;
+  }
+  
+  
 
 
 
