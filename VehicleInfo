@@ -1,15 +1,46 @@
-public class VehicleInfo
-{
+public class VehicleInfo {
+    private String model;
+    private String year;
+    private String type;
+    private String method;
+
+    public VehicleInfo(String model, String year, String type, String method) {
+        this.model = model;
+        this.year = year;
+        this.type = type;
+        this.method = method;
+    }
+
+    public String getModel() {
+        return model;
+    }
 
 
+    public String getYear() {
+        return year;
+    }
 
+    public String getType() {
+        return type;
+    }
 
+    public String getMethod() {
+        return method;
+    }
 
+    public void updateModel(String model) {
+        this.model = model;
+    }
 
+    public void updateYear(String year) {
+        this.year = year;
+    }
 
+    public void updateType(String type) {
+        this.type = type;
+    }
 
-
-
-
-
+    public void updateMethod(String method) {
+        this.method = method;
+    }
 }
