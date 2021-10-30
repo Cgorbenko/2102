@@ -1,1 +1,176 @@
-hello there
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class CustomerProfDB {
+
+    //initialize variables
+    private int numCustomer = 0;
+    private int currentCustomerIndex = 0;
+    private String fileName;
+    List<CustomerProf> customerList = new ArrayList<>();
+
+    public CustomerProfDB(String filename)
+    {
+        //set filename equal to user input
+        this.fileName = filename;
+
+        //call initializeDatabase with filename
+        this.initializeDatabase(this.fileName);
+    }
+
+    public void insertNewProfile(CustomerProf customerProf)
+    {
+        //add customerprof to list of user profiles and increment the number of customers by 1
+        customerList.add(customerProf);
+        numCustomer += 1;
+    }
+
+    public CustomerProf findProfile(String adminID, String lastName)
+    {
+        //increment through list of customers and return profile with matching adminID and last name
+        for(int i = 0; i < numCustomer; i++)
+        {
+            CustomerProf temp = customerList.get(i);
+
+            if ((temp.getAdminID() == adminID) && (temp.getLastName() == lastName))
+            {
+                return customerList.get(i);
+            }
+        }
+
+        //return null if profile cannot be found
+        System.out.println("Error: Profile could not be found.");
+
+        return null;
+    }
+
+    public Boolean deleteProfile(String adminID, String lastName)
+    {
+        //increment through customerlist to remove matching adminID and last name, return boolean true
+        for(int i = 0; i < numCustomer; i++)
+        {
+            CustomerProf temp = customerList.get(i);
+
+            if ((temp.getAdminID() == adminID) && (temp.getLastName() == lastName))
+            {
+                customerList.remove(i);
+                numCustomer -= 1;
+
+                return true;
+            }
+        }
+
+        //return false if profile could not be found
+        return false;
+    }
+
+    public void writeAllCustomerProf(String temp_filename)
+    {
+        //write all customer profiles to file by incrementing through customerlist
+        try
+        {
+            PrintWriter customerWrite = new PrintWriter(temp_filename);
+
+            for (int i = 0; i < numCustomer; i++)
+            {
+                customerWrite.print(customerList.get(i).getAdminID());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getFirstName());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getLastName());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getAddress());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getPhone());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getIncome());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getStatus());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getUse());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getVehicleInfo().getModel());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getVehicleInfo().getYear());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getVehicleInfo().getType());
+                customerWrite.print("\n");
+
+                customerWrite.print(customerList.get(i).getVehicleInfo().getMethod());
+                customerWrite.print("\n");
+
+                if (i != (numCustomer - 1))
+                {
+                    customerWrite.print("\n");
+                }
+
+                customerWrite.flush();
+            }
+
+            //output an error if file does not work
+        } catch (FileNotFoundException e)
+        {
+            System.out.print("Error.");
+            e.printStackTrace();
+        }
+    }
+
+    public void initializeDatabase(String temp_filename)
+    {
+        //read each attribute of the profile in to file
+        try
+        {
+            File customersFile = new File(temp_filename);
+
+            Scanner in = new Scanner(customersFile);
+
+            while(in.hasNextLine())
+            {
+                String adminID = in.nextLine();
+                String firstName = in.nextLine();
+                String lastName = in.nextLine();
+                String address = in.nextLine();
+                String phone = in.nextLine();
+                float income = in.nextFloat();
+                String status = in.nextLine();
+                String use = in.nextLine();
+                String model = in.nextLine();
+                String year = in.nextLine();
+                String type = in.nextLine();
+                String method = in.nextLine();
+
+                if (in.hasNextLine())
+                {
+                    in.nextLine();
+                }
+
+                CustomerProf tempCustomer = new CustomerProf(adminID, firstName, lastName,
+                                               address, phone, income, status, use,
+                                                new VehicleInfo(model, year, type, method));
+
+                insertNewProfile(tempCustomer);
+            }
+        }
+        //output error if file does not work
+        catch (Exception e)
+        {
+            System.out.print("Error.");
+            e.printStackTrace();
+        }
+    }
+}
+
