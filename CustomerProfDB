@@ -1,176 +1,287 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class CustomerProfDB {
+public class CustomerProfInterface {
 
     //initialize variables
-    private int numCustomer = 0;
-    private int currentCustomerIndex = 0;
+    private CustomerProfDB dataBase;
     private String fileName;
-    List<CustomerProf> customerList = new ArrayList<>();
 
-    public CustomerProfDB(String filename)
-    {
-        //set filename equal to user input
+    public CustomerProfInterface(String filename) {
+        //set filename equal to input
+        this.dataBase = new CustomerProfDB(filename);
         this.fileName = filename;
-
-        //call initializeDatabase with filename
-        this.initializeDatabase(this.fileName);
     }
 
-    public void insertNewProfile(CustomerProf customerProf)
-    {
-        //add customerprof to list of user profiles and increment the number of customers by 1
-        customerList.add(customerProf);
-        numCustomer += 1;
-    }
+    public void getUserChoice() {
 
-    public CustomerProf findProfile(String adminID, String lastName)
-    {
-        //increment through list of customers and return profile with matching adminID and last name
-        for(int i = 0; i < numCustomer; i++)
-        {
-            CustomerProf temp = customerList.get(i);
+        boolean check = true;
 
-            if ((temp.getAdminID() == adminID) && (temp.getLastName() == lastName))
-            {
-                return customerList.get(i);
+        //ask user for their choice and call the connected method unti they enter "quit"
+        while (check) {
+            System.out.print("Please Enter Your Choice: \ndeleteCustomerProf \nfindCustomerProf \nupdateCustomerProf \ndisplayAllCustomerProf \nwriteToDB \ncreateNewCustomerProf \nquit \n");
+
+            Scanner in = new Scanner(System.in);
+
+            String input = in.nextLine();
+
+            if (input.equals("deleteCustomerProf")) {
+                deleteCustomerProf();
+            } else if (input.equals("findCustomerProf")) {
+                findCustomerProf();
+            } else if (input.equals("updateCustomerProf")) {
+                updateCustomerProf();
+            } else if (input.equals("displayAllCustomerProf")) {
+                displayAllCustomerProf();
+            } else if (input.equals("writeToDB")) {
+                writeToDB(fileName);
+            } else if (input.equals("createNewCustomerProf")) {
+                dataBase.insertNewProfile(createNewCustomerProf());
+            } else if (input.equals("quit")) {
+                check = false;
+            } else {
+                System.out.println("No Option Detected.\n");
             }
         }
-
-        //return null if profile cannot be found
-        System.out.println("Error: Profile could not be found.");
-
-        return null;
     }
 
-    public Boolean deleteProfile(String adminID, String lastName)
-    {
-        //increment through customerlist to remove matching adminID and last name, return boolean true
-        for(int i = 0; i < numCustomer; i++)
+    public void deleteCustomerProf() {
+        //user inputs adminID and last name, deleteprofile is called with those as arguments
+        System.out.print("Enter Admin ID: ");
+
+        Scanner in1 = new Scanner(System.in);
+        String adminID = in1.nextLine();
+
+        System.out.print("Enter Last Name:");
+
+        Scanner in2 = new Scanner(System.in);
+        String lastName = in2.nextLine();
+
+        if (dataBase.deleteProfile(adminID, lastName))
         {
-            CustomerProf temp = customerList.get(i);
-
-            if ((temp.getAdminID() == adminID) && (temp.getLastName() == lastName))
-            {
-                customerList.remove(i);
-                numCustomer -= 1;
-
-                return true;
-            }
+            System.out.println("Profile was successfully deleted.\n");
         }
-
-        //return false if profile could not be found
-        return false;
-    }
-
-    public void writeAllCustomerProf(String temp_filename)
-    {
-        //write all customer profiles to file by incrementing through customerlist
-        try
+        else
         {
-            PrintWriter customerWrite = new PrintWriter(temp_filename);
-
-            for (int i = 0; i < numCustomer; i++)
-            {
-                customerWrite.print(customerList.get(i).getAdminID());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getFirstName());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getLastName());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getAddress());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getPhone());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getIncome());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getStatus());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getUse());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getVehicleInfo().getModel());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getVehicleInfo().getYear());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getVehicleInfo().getType());
-                customerWrite.print("\n");
-
-                customerWrite.print(customerList.get(i).getVehicleInfo().getMethod());
-                customerWrite.print("\n");
-
-                if (i != (numCustomer - 1))
-                {
-                    customerWrite.print("\n");
-                }
-
-                customerWrite.flush();
-            }
-
-            //output an error if file does not work
-        } catch (FileNotFoundException e)
-        {
-            System.out.print("Error.");
-            e.printStackTrace();
+            System.out.println("Profile deletion was unsuccessful.\n");
         }
     }
 
-    public void initializeDatabase(String temp_filename)
-    {
-        //read each attribute of the profile in to file
-        try
-        {
-            File customersFile = new File(temp_filename);
+    public void findCustomerProf() {
+        //user enters adminID and last name, those are used as arguments in a call to findProfile
+        System.out.print("Enter Admin ID: ");
 
-            Scanner in = new Scanner(customersFile);
+        Scanner in1 = new Scanner(System.in);
+        String adminID = in1.nextLine();
 
-            while(in.hasNextLine())
-            {
-                String adminID = in.nextLine();
-                String firstName = in.nextLine();
-                String lastName = in.nextLine();
-                String address = in.nextLine();
-                String phone = in.nextLine();
-                float income = in.nextFloat();
-                String status = in.nextLine();
-                String use = in.nextLine();
-                String model = in.nextLine();
-                String year = in.nextLine();
-                String type = in.nextLine();
-                String method = in.nextLine();
+        System.out.print("Enter Last Name: ");
 
-                if (in.hasNextLine())
-                {
-                    in.nextLine();
-                }
+        Scanner in2 = new Scanner(System.in);
+        String lastName = in2.nextLine();
 
-                CustomerProf tempCustomer = new CustomerProf(adminID, firstName, lastName,
-                                               address, phone, income, status, use,
-                                                new VehicleInfo(model, year, type, method));
+        CustomerProf temp_profile = dataBase.findProfile(adminID, lastName);
 
-                insertNewProfile(tempCustomer);
+        if (temp_profile == null) {
+            System.out.println("Profile could not be found.\n");
+        } else {
+            displayCustomerProf(temp_profile);
+            System.out.println();
+        }
+    }
+
+    public void updateCustomerProf() {
+        //user enters admin ID and last name, findprofile is called to see if the profile exists
+        System.out.print("Enter Admin ID: ");
+
+        Scanner in1 = new Scanner(System.in);
+        String adminID = in1.nextLine();
+
+        System.out.print("Enter Last Name:");
+
+        Scanner in2 = new Scanner(System.in);
+        String lastName = in2.nextLine();
+
+        CustomerProf temp_profile = dataBase.findProfile(adminID, lastName);
+
+        if (temp_profile == null) {
+            System.out.println("Profile could not be found.");
+        }
+
+        //if the profile exists, user is continuously asked what they want to change, the update method for the attribute is called and the users input is set as the new value
+        boolean check = true;
+
+        while (check) {
+            System.out.print("Enter attribute to update: \nAddress \nPhone \nIncome \nStatus \nUse \nModel \nYear \nType \nMethod \nquit\n");
+
+            Scanner in3 = new Scanner(System.in);
+            String attribute = in3.nextLine();
+
+            if (attribute.equals("Address")) {
+                System.out.print("Enter new address: ");
+
+                Scanner in4 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).updateAddress(in4.nextLine());
+            } else if (attribute.equals("Phone")) {
+                System.out.print("Enter new phone: ");
+
+                Scanner in5 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).updatePhone(in5.nextLine());
+            } else if (attribute.equals("Income")) {
+                System.out.print("Enter new income: ");
+
+                Scanner in6 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).updateIncome(in6.nextFloat());
+            } else if (attribute.equals("Status")) {
+                System.out.print("Enter new status: ");
+
+                Scanner in7 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).updateStatus(in7.nextLine());
+            } else if (attribute.equals("Use")) {
+                System.out.print("Enter new use: ");
+
+                Scanner in8 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).updateUse(in8.nextLine());
+            } else if (attribute.equals("Model")) {
+                System.out.print("Enter new model: ");
+
+                Scanner in9 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).getVehicleInfo().updateModel(in9.nextLine());
+            } else if (attribute.equals("Year")) {
+                System.out.print("Enter new year: ");
+
+                Scanner in10 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).getVehicleInfo().updateYear(in10.nextLine());
+            } else if (attribute.equals("Type")) {
+                System.out.print("Enter new type: ");
+
+                Scanner in11 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).getVehicleInfo().updateType(in11.nextLine());
+            } else if (attribute.equals("Method")) {
+                System.out.print("Enter new method: ");
+
+                Scanner in12 = new Scanner(System.in);
+                dataBase.findProfile(adminID, lastName).getVehicleInfo().updateMethod(in12.nextLine());
+            } else if (attribute.equals("quit")) {
+                check = false;
+            } else {
+                System.out.println("Invalid Input. Please try again.\n");
             }
         }
-        //output error if file does not work
-        catch (Exception e)
-        {
-            System.out.print("Error.");
-            e.printStackTrace();
+    }
+
+    public void displayCustomerProf(CustomerProf temp_profile) {
+        //get each attribute from the profile and print them
+        System.out.println("First Name: " + temp_profile.getFirstName());
+        System.out.println("Last Name: " + temp_profile.getLastName());
+        System.out.println("Address: " + temp_profile.getAddress());
+        System.out.println("Phone Number: " + temp_profile.getPhone());
+        System.out.println("Income: " + temp_profile.getIncome());
+        System.out.println("Status: " + temp_profile.getStatus());
+        System.out.println("Use: " + temp_profile.getUse());
+        System.out.println("Car Model: " + temp_profile.getVehicleInfo().getModel());
+        System.out.println("Car Year: " + temp_profile.getVehicleInfo().getYear());
+        System.out.println("Car Type: " + temp_profile.getVehicleInfo().getType());
+        System.out.println("Car Method: " + temp_profile.getVehicleInfo().getMethod());
+    }
+
+    public void displayAllCustomerProf() {
+        //admin ID is taken as input and if a profile has the matching admin ID, it is printed
+        System.out.print("Enter Admin ID: ");
+
+        Scanner in = new Scanner(System.in);
+        String adminID = in.nextLine();
+
+        for (CustomerProf temp_profile : dataBase.customerList) {
+            if (temp_profile.getAdminID().equals(adminID)) {
+                displayCustomerProf(temp_profile);
+                System.out.println("\n");
+            }
         }
+    }
+
+    public void writeToDB(String filename) {
+        //calls writeAllCustomerProf to write all profiles
+        dataBase.writeAllCustomerProf(filename);
+    }
+
+    public CustomerProf createNewCustomerProf() {
+        //each attribute is taken as input and put as an argument in a new CustomerProf
+        System.out.print("Enter new admin ID: ");
+
+        Scanner in1 = new Scanner(System.in);
+        String adminID = in1.nextLine();
+
+        System.out.print("Enter new first name: ");
+
+        Scanner in2 = new Scanner(System.in);
+        String firstName = in2.nextLine();
+
+        System.out.print("Enter new last name: ");
+
+        Scanner in3 = new Scanner(System.in);
+        String lastName = in3.nextLine();
+
+        System.out.print("Enter new address: ");
+
+        Scanner in4 = new Scanner(System.in);
+        String address = in4.nextLine();
+
+        System.out.print("Enter new phone: ");
+
+        Scanner in5 = new Scanner(System.in);
+        String phone = in5.nextLine();
+
+        System.out.print("Enter new income: ");
+
+        Scanner in6 = new Scanner(System.in);
+        float income = in6.nextFloat();
+
+        System.out.print("Enter new status: ");
+
+        Scanner in7 = new Scanner(System.in);
+        String status = in7.nextLine();
+
+        System.out.print("Enter new use: ");
+
+        Scanner in8 = new Scanner(System.in);
+        String use = in8.nextLine();
+
+        VehicleInfo temp_vehicleInfo = createNewVehicleInfo();
+
+        return new CustomerProf(adminID, firstName, lastName, address, phone, income, status, use, temp_vehicleInfo);
+    }
+
+    public VehicleInfo createNewVehicleInfo() {
+        //each attribute is taken as input and used as arguments in new VehicleInfo
+        System.out.print("Enter new car model: ");
+
+        Scanner in9 = new Scanner(System.in);
+        String model = in9.nextLine();
+
+        System.out.print("Enter new car year: ");
+
+        Scanner in10 = new Scanner(System.in);
+        String year = in10.nextLine();
+
+        System.out.print("Enter new car type: ");
+
+        Scanner in11 = new Scanner(System.in);
+        String type = in11.nextLine();
+
+        System.out.print("Enter new car method: ");
+
+        Scanner in12 = new Scanner(System.in);
+        String method = in12.nextLine();
+
+        return new VehicleInfo(model, year, type, method);
+    }
+
+    public void initDB(String fileName)
+    {
+        dataBase.initializeDatabase(fileName);
+    }
+
+    public static void main(String args[]) {
+        CustomerProfInterface Interface = new CustomerProfInterface("C:\\Users\\denis\\OneDrive\\Documents\\DJ\\profiles.txt");
+        Interface.getUserChoice();
     }
 }
-
