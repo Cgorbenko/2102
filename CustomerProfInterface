@@ -6,64 +6,45 @@ public class CustomerProfInterface {
     private CustomerProfDB dataBase;
     private String fileName;
 
-    public CustomerProfInterface(String filename)
-    {
+    public CustomerProfInterface(String filename) {
         //set filename equal to input
         this.dataBase = new CustomerProfDB(filename);
         this.fileName = filename;
     }
 
-    public void getUserChoice()
-    {
+    public void getUserChoice() {
 
         boolean check = true;
 
         //ask user for their choice and call the connected method unti they enter "quit"
-        while(check)
-        {
+        while (check) {
             System.out.print("Please Enter Your Choice: \ndeleteCustomerProf \nfindCustomerProf \nupdateCustomerProf \ndisplayAllCustomerProf \nwriteToDB \ncreateNewCustomerProf \nquit \n");
 
             Scanner in = new Scanner(System.in);
 
             String input = in.nextLine();
 
-            if (input.equals("deleteCustomerProf"))
-            {
+            if (input.equals("deleteCustomerProf")) {
                 deleteCustomerProf();
-            }
-            else if (input.equals("findCustomerProf"))
-            {
+            } else if (input.equals("findCustomerProf")) {
                 findCustomerProf();
-            }
-            else if (input.equals("updateCustomerProf"))
-            {
+            } else if (input.equals("updateCustomerProf")) {
                 updateCustomerProf();
-            }
-            else if (input.equals("displayAllCustomerProf"))
-            {
+            } else if (input.equals("displayAllCustomerProf")) {
                 displayAllCustomerProf();
-            }
-            else if (input.equals("writeToDB"))
-            {
+            } else if (input.equals("writeToDB")) {
                 writeToDB(fileName);
-            }
-            else if (input.equals("createNewCustomerProf"))
-            {
+            } else if (input.equals("createNewCustomerProf")) {
                 dataBase.insertNewProfile(createNewCustomerProf());
-            }
-            else if (input.equals("quit"))
-            {
+            } else if (input.equals("quit")) {
                 check = false;
-            }
-            else
-            {
-                System.out.print("No Option Detected.");
+            } else {
+                System.out.println("No Option Detected.\n");
             }
         }
     }
 
-    public void deleteCustomerProf()
-    {
+    public void deleteCustomerProf() {
         //user inputs adminID and last name, deleteprofile is called with those as arguments
         System.out.print("Enter Admin ID: ");
 
@@ -77,41 +58,37 @@ public class CustomerProfInterface {
 
         if (dataBase.deleteProfile(adminID, lastName))
         {
-            System.out.print("Profile was successfully deleted.");
+            System.out.println("Profile was successfully deleted.\n");
         }
         else
         {
-            System.out.print("Profile deletion was unsuccessful.");
+            System.out.println("Profile deletion was unsuccessful.\n");
         }
     }
 
-    public void findCustomerProf()
-    {
+    public void findCustomerProf() {
         //user enters adminID and last name, those are used as arguments in a call to findProfile
         System.out.print("Enter Admin ID: ");
 
         Scanner in1 = new Scanner(System.in);
         String adminID = in1.nextLine();
 
-        System.out.print("Enter Last Name:");
+        System.out.print("Enter Last Name: ");
 
         Scanner in2 = new Scanner(System.in);
         String lastName = in2.nextLine();
 
         CustomerProf temp_profile = dataBase.findProfile(adminID, lastName);
 
-        if (temp_profile == null)
-        {
-            System.out.print("Profile could not be found.");
-        }
-        else
-        {
+        if (temp_profile == null) {
+            System.out.println("Profile could not be found.\n");
+        } else {
             displayCustomerProf(temp_profile);
+            System.out.println();
         }
     }
 
-    public void updateCustomerProf()
-    {
+    public void updateCustomerProf() {
         //user enters admin ID and last name, findprofile is called to see if the profile exists
         System.out.print("Enter Admin ID: ");
 
@@ -125,97 +102,73 @@ public class CustomerProfInterface {
 
         CustomerProf temp_profile = dataBase.findProfile(adminID, lastName);
 
-        if (temp_profile == null)
-        {
-            System.out.print("Profile could not be found.");
+        if (temp_profile == null) {
+            System.out.println("Profile could not be found.");
         }
 
         //if the profile exists, user is continuously asked what they want to change, the update method for the attribute is called and the users input is set as the new value
         boolean check = true;
 
-        while(check)
-        {
-            System.out.print("Enter attribute to update: \nAddress \nPhone \nIncome \nStatus \nUse \nModel \nYear \nType \nMethod");
+        while (check) {
+            System.out.print("Enter attribute to update: \nAddress \nPhone \nIncome \nStatus \nUse \nModel \nYear \nType \nMethod \nquit\n");
 
             Scanner in3 = new Scanner(System.in);
             String attribute = in3.nextLine();
 
-            if (attribute.equals("Address"))
-            {
+            if (attribute.equals("Address")) {
                 System.out.print("Enter new address: ");
 
                 Scanner in4 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).updateAddress(in4.nextLine());
-            }
-            else if (attribute.equals("Phone"))
-            {
+            } else if (attribute.equals("Phone")) {
                 System.out.print("Enter new phone: ");
 
                 Scanner in5 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).updatePhone(in5.nextLine());
-            }
-            else if (attribute.equals("Income"))
-            {
+            } else if (attribute.equals("Income")) {
                 System.out.print("Enter new income: ");
 
                 Scanner in6 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).updateIncome(in6.nextFloat());
-            }
-            else if (attribute.equals("Status"))
-            {
+            } else if (attribute.equals("Status")) {
                 System.out.print("Enter new status: ");
 
                 Scanner in7 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).updateStatus(in7.nextLine());
-            }
-            else if (attribute.equals("Use"))
-            {
+            } else if (attribute.equals("Use")) {
                 System.out.print("Enter new use: ");
 
                 Scanner in8 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).updateUse(in8.nextLine());
-            }
-            else if (attribute.equals("Model"))
-            {
+            } else if (attribute.equals("Model")) {
                 System.out.print("Enter new model: ");
 
                 Scanner in9 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).getVehicleInfo().updateModel(in9.nextLine());
-            }
-            else if (attribute.equals("Year"))
-            {
+            } else if (attribute.equals("Year")) {
                 System.out.print("Enter new year: ");
 
                 Scanner in10 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).getVehicleInfo().updateYear(in10.nextLine());
-            }
-            else if (attribute.equals("Type"))
-            {
+            } else if (attribute.equals("Type")) {
                 System.out.print("Enter new type: ");
 
                 Scanner in11 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).getVehicleInfo().updateType(in11.nextLine());
-            }
-            else if (attribute.equals("Method"))
-            {
+            } else if (attribute.equals("Method")) {
                 System.out.print("Enter new method: ");
 
                 Scanner in12 = new Scanner(System.in);
                 dataBase.findProfile(adminID, lastName).getVehicleInfo().updateMethod(in12.nextLine());
-            }
-            else if (attribute.equals("quit"))
-            {
+            } else if (attribute.equals("quit")) {
                 check = false;
-            }
-            else
-            {
-                System.out.print("Invalid Input. Please try again.");
+            } else {
+                System.out.println("Invalid Input. Please try again.\n");
             }
         }
     }
 
-    public void displayCustomerProf(CustomerProf temp_profile)
-    {
+    public void displayCustomerProf(CustomerProf temp_profile) {
         //get each attribute from the profile and print them
         System.out.println("First Name: " + temp_profile.getFirstName());
         System.out.println("Last Name: " + temp_profile.getLastName());
@@ -230,32 +183,27 @@ public class CustomerProfInterface {
         System.out.println("Car Method: " + temp_profile.getVehicleInfo().getMethod());
     }
 
-    public void displayAllCustomerProf()
-    {
+    public void displayAllCustomerProf() {
         //admin ID is taken as input and if a profile has the matching admin ID, it is printed
         System.out.print("Enter Admin ID: ");
 
         Scanner in = new Scanner(System.in);
         String adminID = in.nextLine();
 
-        for (CustomerProf temp_profile : dataBase.customerList)
-        {
-            if (temp_profile.getAdminID().equals(adminID))
-            {
+        for (CustomerProf temp_profile : dataBase.customerList) {
+            if (temp_profile.getAdminID().equals(adminID)) {
                 displayCustomerProf(temp_profile);
                 System.out.println("\n");
             }
         }
     }
 
-    public void writeToDB(String filename)
-    {
+    public void writeToDB(String filename) {
         //calls writeAllCustomerProf to write all profiles
         dataBase.writeAllCustomerProf(filename);
     }
 
-    public CustomerProf createNewCustomerProf()
-    {
+    public CustomerProf createNewCustomerProf() {
         //each attribute is taken as input and put as an argument in a new CustomerProf
         System.out.print("Enter new admin ID: ");
 
@@ -302,8 +250,7 @@ public class CustomerProfInterface {
         return new CustomerProf(adminID, firstName, lastName, address, phone, income, status, use, temp_vehicleInfo);
     }
 
-    public VehicleInfo createNewVehicleInfo()
-    {
+    public VehicleInfo createNewVehicleInfo() {
         //each attribute is taken as input and used as arguments in new VehicleInfo
         System.out.print("Enter new car model: ");
 
@@ -326,5 +273,15 @@ public class CustomerProfInterface {
         String method = in12.nextLine();
 
         return new VehicleInfo(model, year, type, method);
+    }
+
+    public void initDB(String fileName)
+    {
+        dataBase.initializeDatabase(fileName);
+    }
+
+    public static void main(String args[]) {
+        CustomerProfInterface Interface = new CustomerProfInterface("C:\\Users\\denis\\OneDrive\\Documents\\DJ\\profiles.txt");
+        Interface.getUserChoice();
     }
 }
